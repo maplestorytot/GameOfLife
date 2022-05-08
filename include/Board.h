@@ -23,22 +23,21 @@ namespace GameOfLife{
         virtual CellState operator[](const Coordinate & coordinate) const = 0;
     };
 
-    enum BoardType {Simple};
+    enum BoardType {Matrix};
     class BoardFactory {
     public:
         static std::unique_ptr<IBoard> createBoard(BoardType boardType, std::initializer_list<
                 std::initializer_list<CellState>> init_list);
     };
 
-    class SimpleBoard : public IBoard {
+    class MatrixBoard : public IBoard {
     public:
-        SimpleBoard(std::initializer_list<std::initializer_list<CellState>> init_list);
+        MatrixBoard(std::initializer_list<std::initializer_list<CellState>> init_list);
         void doAdvance() override;
         CellState operator[](const Coordinate & coordinate) const override;
     private:
         void advanceCell(const Coordinate& coordinate);
-        std::unique_ptr<std::vector<CellState>> obtainNeighbors(const Coordinate& coordinate);
-        unsigned int numberNeighborsAlive(const std::vector<CellState>& neighbors);
+        int countLiveNeighbors(const Coordinate& coordinate);
 
     private:
         std::vector<std::vector<CellState>> board;

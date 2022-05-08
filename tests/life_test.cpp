@@ -8,7 +8,7 @@
 namespace GameOfLife{
     class TestConfig {
     public:
-        static const BoardType BOARD_TYPE = BoardType::Simple;
+        static const BoardType BOARD_TYPE = BoardType::Matrix;
     };
 
     TEST(RuleTest, OnlyAllowSquardBoards) {

@@ -7,11 +7,11 @@
 #include <stdexcept>
 
 namespace GameOfLife {
-    CellState SimpleBoard::operator[](const Coordinate& coordinate) const {
+    CellState MatrixBoard::operator[](const Coordinate& coordinate) const {
         return board[coordinate.row][coordinate.col];
     }
 
-    SimpleBoard::SimpleBoard(std::initializer_list<std::initializer_list<CellState>> input) : board_size(input.size()){
+    MatrixBoard::MatrixBoard(std::initializer_list<std::initializer_list<CellState>> input) : board_size(input.size()){
         Expects(input.size() > 0);
         for(const auto & row : input){
             Expects(row.size() == input.size());
@@ -23,7 +23,7 @@ namespace GameOfLife {
         copy_board = board;
     }
 
-    void SimpleBoard::doAdvance() {
+    void MatrixBoard::doAdvance() {
         for(int row = 0; row < board_size; row++){
             for(int col = 0; col < board_size; col++){
                 advanceCell({row, col});
@@ -32,10 +32,9 @@ namespace GameOfLife {
         board = copy_board;
     }
 
-    void SimpleBoard::advanceCell(const Coordinate& coordinate){
-        std::unique_ptr<std::vector<CellState>> neighbors = obtainNeighbors(coordinate);
+    void MatrixBoard::advanceCell(const Coordinate& coordinate){
         CellState& state = copy_board[coordinate.row][coordinate.col];
-        auto liveNeighbors = numberNeighborsAlive(*neighbors.get());
+        auto liveNeighbors = countLiveNeighbors(coordinate);
         if((liveNeighbors == 0 || liveNeighbors == 1) && state == LIVE){
             state = DEAD;
         }else if(liveNeighbors == 2){
@@ -46,8 +45,8 @@ namespace GameOfLife {
         }
     }
 
-    std::unique_ptr<std::vector<CellState>> SimpleBoard::obtainNeighbors(const Coordinate& coordinate){
-        std::unique_ptr<std::vector<CellState>> neighbors = std::make_unique<std::vector<CellState>>();
+    int MatrixBoard::countLiveNeighbors(const Coordinate& coordinate){
+        unsigned count = 0;
         for(int row = coordinate.row - 1; row <= coordinate.row + 1; row++){
             int chosen_row = row;
             if(row < 0){
@@ -65,26 +64,19 @@ namespace GameOfLife {
                 if(chosen_row == coordinate.row && chosen_col == coordinate.col){
                     continue;
                 }
-                neighbors->push_back(board[chosen_row][chosen_col]);
+                if(board[chosen_row][chosen_col] == LIVE){
+                    count++;
+                }
             }
         }
-        return std::move(neighbors);
-    }
-
-    unsigned int SimpleBoard::numberNeighborsAlive(const std::vector<CellState>& neighbors){
-        unsigned int count = 0;
-        for(const auto & cell: neighbors){
-            if (cell == LIVE){
-                count++;
-            }
-        }
+        Ensures(count >= 0);
         return count;
     }
 
     std::unique_ptr<IBoard>
     BoardFactory::createBoard(BoardType boardType, std::initializer_list<std::initializer_list<CellState>> init_list) {
-        if(boardType == BoardType::Simple){
-            return std::unique_ptr<IBoard>(new SimpleBoard(init_list));
+        if(boardType == BoardType::Matrix){
+            return std::unique_ptr<IBoard>(new MatrixBoard(init_list));
         }
         throw std::invalid_argument( "Invalid Board Type!" );
     }
