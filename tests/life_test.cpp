@@ -3,6 +3,7 @@
 //
 #include <gtest/gtest.h>
 #include "../include/Board.h"
+#include "../include/BoardFactory.h"
 
 // SimpleBoard can be initialized with random input
 namespace GameOfLife{

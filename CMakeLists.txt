@@ -24,7 +24,8 @@ enable_testing()
 add_executable(
         life_test
         tests/life_test.cpp
-        src/Board.cpp
+        src/BoardFactory.cpp
+        src/SimpleBoard.cpp
 )
 target_link_libraries(
         life_test
