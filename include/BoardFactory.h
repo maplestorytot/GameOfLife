@@ -8,6 +8,7 @@
 #include "Board.h"
 namespace GameOfLife {
     enum BoardType {NestedVector, Vector};
+    static BoardType AllBoardTypes [] = {NestedVector, Vector};
     class BoardFactory {
     public:
         static std::unique_ptr<IBoard> createBoard(BoardType boardType, std::initializer_list<

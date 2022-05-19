@@ -32,5 +32,21 @@ target_link_libraries(
         gtest_main
         GSL
 )
+
+find_package(benchmark REQUIRED)
+add_executable(
+        perf_test
+        tests/performance_test.cpp
+        src/BoardFactory.cpp
+        src/SimpleBoard.cpp
+)
+
+target_link_libraries(
+        perf_test
+        GSL
+        benchmark::benchmark
+        benchmark::benchmark_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(life_test)

@@ -5,27 +5,26 @@
 #include "../include/Board.h"
 #include "../include/BoardFactory.h"
 
-// SimpleBoard can be initialized with random input
 namespace GameOfLife{
-    class TestConfig {
-    public:
-        static const BoardType BOARD_TYPE = BoardType::NestedVector;
+    class LifeTest :
+            public testing::TestWithParam<BoardType> {
     };
+    INSTANTIATE_TEST_SUITE_P(RuleTest, LifeTest, testing::ValuesIn(AllBoardTypes));
 
-    TEST(RuleTest, OnlyAllowSquardBoards) {
+    TEST_P(LifeTest, OnlyAllowSquardBoards) {
         EXPECT_DEATH({
              auto board =
-                     BoardFactory::createBoard(TestConfig::BOARD_TYPE, {{DEAD},{DEAD}});
+                     BoardFactory::createBoard(GetParam(), {{DEAD},{DEAD}});
         }, "");
 
         EXPECT_NO_FATAL_FAILURE({
              auto board =
-                     BoardFactory::createBoard(TestConfig::BOARD_TYPE, {{DEAD}});
+                     BoardFactory::createBoard(GetParam(), {{DEAD}});
          });
     }
 
-    TEST(RuleTest, PopulatedCellWithOneNeighborsDies) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, PopulatedCellWithOneNeighborsDies) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,DEAD,DEAD},
                 {DEAD,DEAD,LIVE,DEAD},
                 {DEAD,DEAD,LIVE,DEAD},
@@ -36,8 +35,8 @@ namespace GameOfLife{
         EXPECT_EQ((*board)[cord], DEAD);
     }
 
-    TEST(RuleTest, PopulatedCellWithNoNeighborsDies) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, PopulatedCellWithNoNeighborsDies) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,DEAD,DEAD},
                 {DEAD,DEAD,DEAD,DEAD},
                 {DEAD,DEAD,LIVE,DEAD},
@@ -48,8 +47,8 @@ namespace GameOfLife{
         EXPECT_EQ((*board)[cord], DEAD);
     }
 
-    TEST(RuleTest, AtEdgePopulatedCellWithOneNeighborsDies) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, AtEdgePopulatedCellWithOneNeighborsDies) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,DEAD,DEAD},
                 {DEAD,DEAD,DEAD,DEAD},
                 {DEAD,DEAD,DEAD,LIVE},
@@ -60,8 +59,8 @@ namespace GameOfLife{
         EXPECT_EQ((*board)[cord], DEAD);
     }
 
-    TEST(RuleTest, PopulatedCellWithFourOrMoreNeighborsDies) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, PopulatedCellWithFourOrMoreNeighborsDies) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,LIVE,DEAD},
                 {DEAD,LIVE,LIVE,LIVE},
                 {DEAD,DEAD,LIVE,DEAD},
@@ -72,8 +71,8 @@ namespace GameOfLife{
         EXPECT_EQ((*board)[cord], DEAD);
     }
 
-    TEST(RuleTest, AtEdgePopulatedCellWithFourOrMoreNeighborsDies) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, AtEdgePopulatedCellWithFourOrMoreNeighborsDies) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,LIVE,DEAD},
                 {LIVE,DEAD,LIVE,LIVE},
                 {DEAD,DEAD,LIVE,DEAD},
@@ -84,8 +83,8 @@ namespace GameOfLife{
         EXPECT_EQ((*board)[cord], DEAD);
     }
 
-    TEST(RuleTest, UnpopulatedCellWithThreeNeighborsLives) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, UnpopulatedCellWithThreeNeighborsLives) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,LIVE,DEAD},
                 {DEAD,LIVE,DEAD,LIVE},
                 {DEAD,DEAD,DEAD,DEAD},
@@ -96,8 +95,8 @@ namespace GameOfLife{
         EXPECT_EQ((*board)[cord], LIVE);
     }
 
-    TEST(RuleTest, AtEdgeUnpopulatedCellWithThreeNeighborsLives) {
-        auto board = BoardFactory::createBoard(TestConfig::BOARD_TYPE, {
+    TEST_P(LifeTest, AtEdgeUnpopulatedCellWithThreeNeighborsLives) {
+        auto board = BoardFactory::createBoard(GetParam(), {
                 {DEAD,DEAD,LIVE,DEAD},
                 {DEAD,DEAD,DEAD,LIVE},
                 {DEAD,DEAD,DEAD,DEAD},
