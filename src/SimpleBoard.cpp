@@ -7,13 +7,16 @@
 #include "../include/simple_board/VectorMatrix.h"
 #include <gsl/gsl>
 #include <iostream>
+#include <omp.h>
 
 namespace GameOfLife {
     NestedVectorBoard::NestedVectorBoard(
-            std::initializer_list<std::initializer_list<CellState>> input) : board(input.size(), input), copy_board(board){}
+            StartingBoardState input, bool multi_threaded) :
+            board(input.size(), input), copy_board(board), multi_threaded(multi_threaded){}
 
     VectorBoard::VectorBoard(
-            std::initializer_list<std::initializer_list<CellState>> input) : board(input.size(), input), copy_board(board){}
+            StartingBoardState input, bool multi_threaded) :
+            board(input.size(), input), copy_board(board), multi_threaded(multi_threaded){}
 
     CellState &NestedVectorBoard::operator[](const Coordinate &coordinate) {
         return board[coordinate];
@@ -32,7 +35,7 @@ namespace GameOfLife {
     }
 
     NestedVectorRepresentationOfMatrix::NestedVectorRepresentationOfMatrix(
-            unsigned boardSize, std::initializer_list<std::initializer_list<CellState>> input)
+            unsigned boardSize, StartingBoardState input)
             : board_size(boardSize) {
         Expects(input.size() == boardSize);
         Expects(board_size > 0);
@@ -50,7 +53,7 @@ namespace GameOfLife {
     }
 
     VectorRepresentationOfMatrix::VectorRepresentationOfMatrix(
-            unsigned boardSize, std::initializer_list<std::initializer_list<CellState>> input)
+            unsigned boardSize, StartingBoardState input)
             : board_size(boardSize){
         Expects(input.size() == boardSize);
         Expects(board_size > 0);
@@ -67,6 +70,7 @@ namespace GameOfLife {
     }
 
     void NestedVectorBoard::doAdvance(){
+        #pragma omp parallel for if(multi_threaded)
         for(int row = 0; row < board.get_size(); row++){
             for(int col = 0; col < board.get_size(); col++){
                 BoardAlgorithmHelper::advanceCell(board, copy_board, {row, col});
@@ -76,6 +80,7 @@ namespace GameOfLife {
     }
 
     void VectorBoard::doAdvance() {
+        #pragma omp parallel for if(multi_threaded)
         for(int row = 0; row < board.get_size(); row++){
             for(int col = 0; col < board.get_size(); col++){
                 BoardAlgorithmHelper::advanceCell(board, copy_board, {row, col});

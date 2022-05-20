@@ -7,12 +7,11 @@
 #include <memory>
 #include "Board.h"
 namespace GameOfLife {
-    enum BoardType {NestedVector, Vector};
-    static BoardType AllBoardTypes [] = {NestedVector, Vector};
+    enum BoardType {NestedVector, Vector, MultiThreadedNestedVector, MultiThreadedVector};
+    static BoardType AllBoardTypes [] = {NestedVector, Vector, MultiThreadedNestedVector, MultiThreadedVector};
     class BoardFactory {
     public:
-        static std::unique_ptr<IBoard> createBoard(BoardType boardType, std::initializer_list<
-        std::initializer_list<CellState>> init_list);
+        static std::unique_ptr<IBoard> createBoard(BoardType boardType, StartingBoardState init_list);
     };
 }
 #endif //GAMEOFLIFE_BOARDFACTORY_H

@@ -9,7 +9,7 @@ namespace GameOfLife {
     class NestedVectorRepresentationOfMatrix : public MatrixTemplate<CellState, Coordinate> {
     public:
         NestedVectorRepresentationOfMatrix(unsigned boardSize,
-                                           std::initializer_list<std::initializer_list<CellState>> input);
+                                           StartingBoardState input);
         CellState& operator[](const Coordinate& coordinate) override;
         unsigned get_size() const override;
     private:
@@ -20,13 +20,14 @@ namespace GameOfLife {
     class NestedVectorBoard : public IBoard {
         friend class BoardAlgorithmHelper;
     public:
-        NestedVectorBoard(std::initializer_list<std::initializer_list<CellState>> init_list);
+        NestedVectorBoard(StartingBoardState init_list,  bool multi_threaded);
         void doAdvance() override;
         CellState& operator[](const Coordinate& coordinate) override;
         void print() override;
     private:
         NestedVectorRepresentationOfMatrix board;
         NestedVectorRepresentationOfMatrix copy_board;
+        bool multi_threaded;
     };
 }  // namespace GameOfLife
 #endif //GAMEOFLIFE_NESTEDVECTORMATRIX_H

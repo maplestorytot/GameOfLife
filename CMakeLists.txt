@@ -31,14 +31,16 @@ target_link_libraries(
         life_test
         gtest_main
         GSL
+        OpenMP::OpenMP_CXX
 )
-
+find_package(OpenMP REQUIRED)
 find_package(benchmark REQUIRED)
 add_executable(
         perf_test
         tests/performance_test.cpp
         src/BoardFactory.cpp
         src/SimpleBoard.cpp
+        tests/RandomBoardCreator.cpp
 )
 
 target_link_libraries(
@@ -46,6 +48,7 @@ target_link_libraries(
         GSL
         benchmark::benchmark
         benchmark::benchmark_main
+        OpenMP::OpenMP_CXX
 )
 
 include(GoogleTest)

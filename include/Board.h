@@ -18,6 +18,9 @@ namespace GameOfLife {
         Column col;
     };
 
+    using StartingBoardState = std::vector<
+            std::vector<CellState>>;
+
     class IBoard {
     DECLARE_CLASS_AS_INTERFACE(IBoard);
     public:
