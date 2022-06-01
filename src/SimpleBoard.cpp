@@ -93,10 +93,33 @@ namespace GameOfLife {
         BoardAlgorithmHelper::print(board);
     }
 
+    StartingBoardState NestedVectorBoard::convert() {
+        StartingBoardState converted_board;
+        converted_board.resize(board.get_size());
+        for(int row = 0; row < board.get_size(); row++){
+            for(int col = 0; col < board.get_size(); col++){
+                converted_board[row].resize(board.get_size());
+                converted_board[row][col] = board[{row, col}];
+            }
+        }
+        return converted_board;
+    }
+
     void VectorBoard::print() {
         BoardAlgorithmHelper::print(board);
     }
 
+    StartingBoardState VectorBoard::convert() {
+        StartingBoardState converted_board;
+        converted_board.resize(board.get_size());
+        for(int row = 0; row < board.get_size(); row++){
+            for(int col = 0; col < board.get_size(); col++){
+                converted_board[row].resize(board.get_size());
+                converted_board[row][col] = board[{row, col}];
+            }
+        }
+        return converted_board;
+    }
 
     void BoardAlgorithmHelper::advanceCell(MatrixTemplate<CellState, Coordinate> &board,
                                            MatrixTemplate<CellState, Coordinate> &copy_board,

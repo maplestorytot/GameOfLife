@@ -257,13 +257,15 @@ namespace GameOfLife {
     Node * NextNodeGenerationTransformer::getMirrorEast(Node * node){
         if(node->get_level() == 1){
             return node_factory->getOrCreateNode(node_factory->getDeadNode(),
-                                                 node->get_ne(), node->get_se(),
-                                                 node_factory->getDeadNode());
+                                                 node->get_ne(),
+                                                 node_factory->getDeadNode(),
+                                                 node->get_se());
         }
         return node_factory->getOrCreateNode(
                 node_factory->getEmptyNodeAtLevel(node->get_level() - 1),
-                getMirrorEast(node->get_ne()), getMirrorEast(node->get_se()),
-                node_factory->getEmptyNodeAtLevel(node->get_level() - 1));
+                getMirrorEast(node->get_ne()),
+                node_factory->getEmptyNodeAtLevel(node->get_level() - 1),
+                getMirrorEast(node->get_se()));
     }
 
     Node * NextNodeGenerationTransformer::getMirrorWest(Node * node){

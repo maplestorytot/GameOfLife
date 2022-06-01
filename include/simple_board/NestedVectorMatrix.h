@@ -24,6 +24,7 @@ namespace GameOfLife {
         void doAdvance() override;
         CellState operator[](const Coordinate& coordinate) override;
         void print() override;
+        StartingBoardState convert() override;
     private:
         NestedVectorRepresentationOfMatrix board;
         NestedVectorRepresentationOfMatrix copy_board;

@@ -7,17 +7,17 @@
 #include "RandomBoardCreator.h"
 
 namespace GameOfLife{
-    TEST(LifeTest, PrintComparison){
-        int BOARD_SIZE = 32;
-        int NUM_GEN =  20;
+    TEST(LifeTest, IntegrationTestLongRunning){
+        int BOARD_SIZE = 512;
+        int NUM_GEN =  10;
         int64_t seed = RandomBoardCreator::DEFAULT_SEED;
 //            int64_t seed = time(0);
         StartingBoardState STARTING_BOARD = RandomBoardCreator::CreateRandomBoard(BOARD_SIZE, seed);
         auto board = BoardFactory::createBoard(BoardType::NestedVector, STARTING_BOARD);
         auto board2 = BoardFactory::createBoard(BoardType::HashLife, STARTING_BOARD);
 
-        board->print();
-        board2->print();
+//        board->print();
+//        board2->print();
 
         for(int i = 0; i < NUM_GEN; i++){
             board->doAdvance();
@@ -27,9 +27,9 @@ namespace GameOfLife{
             board2->doAdvance();
         }
 
-        board->print();
-        board2->print();
-        EXPECT_EQ(false, true);
+//        board->print();
+//        board2->print();
+        EXPECT_EQ(board->convert(), board2->convert());
     }
 
     class LifeTest :
@@ -140,6 +140,23 @@ namespace GameOfLife{
         Coordinate cord = {7, 7};
         EXPECT_EQ((*board)[cord], DEAD);
     }
+
+    TEST_P(LifeTest, AtEdgePopulatedCellWithFourOrMoreNeighborsDies2) {
+        auto board = BoardFactory::createBoard(GetParam(), {
+                {LIVE,DEAD,LIVE,LIVE,DEAD,LIVE,LIVE,DEAD},
+                {LIVE,DEAD,DEAD,LIVE,DEAD,DEAD,LIVE,LIVE},
+                {LIVE,LIVE,LIVE,LIVE,DEAD,LIVE,LIVE,LIVE},
+                {LIVE,DEAD,DEAD,LIVE,LIVE,DEAD,DEAD,DEAD},
+                {DEAD,DEAD,LIVE,LIVE,LIVE,LIVE,LIVE,LIVE},
+                {LIVE,LIVE,DEAD,DEAD,LIVE,DEAD,LIVE,LIVE},
+                {LIVE,DEAD,LIVE,LIVE,LIVE,DEAD,DEAD,DEAD},
+                {LIVE,DEAD,DEAD,DEAD,DEAD,LIVE,LIVE,DEAD}
+        });
+        board->doAdvance();
+        Coordinate cord = {6, 0};
+        EXPECT_EQ((*board)[cord], DEAD);
+    }
+
 
     TEST_P(LifeTest, UnpopulatedCellWithThreeNeighborsLives) {
         auto board = BoardFactory::createBoard(GetParam(), {

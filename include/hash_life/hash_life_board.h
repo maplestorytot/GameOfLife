@@ -19,10 +19,14 @@ namespace GameOfLife {
         CellState operator[](const Coordinate &coordinate) override;
 
         void print() override;
+
+        StartingBoardState convert() override;
+
     private:
         Node* createBorderAround(Node * nw, Node * ne, Node * sw,
                                             Node * se);
         void copyBorders();
+
     private:
         unsigned board_size;
         std::shared_ptr<NodeFactory> node_factory;

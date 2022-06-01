@@ -27,6 +27,7 @@ namespace GameOfLife {
         virtual void doAdvance() = 0;
         virtual CellState operator[](const Coordinate& coordinate) = 0;
         virtual void print() = 0;
+        virtual StartingBoardState convert() = 0;
     };
 
 }  // namespace GameOfLife

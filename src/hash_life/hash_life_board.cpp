@@ -132,5 +132,21 @@ namespace GameOfLife {
                 root->get_se()->get_nw()));
     }
 
+    StartingBoardState HashLifeBoard::convert() {
+        auto core = node_factory->getOrCreateNode(
+                root->get_nw()->get_se(),
+                root->get_ne()->get_sw(),
+                root->get_sw()->get_ne(),
+                root->get_se()->get_nw());
+        StartingBoardState board;
+        unsigned current_size = pow(2, core->get_level());
+        board.resize(current_size);
+        for(auto & row : board){
+            row.resize(current_size);
+        }
+        printer.printHelper(board, core, current_size / 2, current_size / 2);
+        return board;
+    }
+
 
 }  // namespace GameOfLife
