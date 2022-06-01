@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 project(GameOfLife)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 
 include(FetchContent)
 FetchContent_Declare(GSL
@@ -26,6 +28,13 @@ add_executable(
         tests/life_test.cpp
         src/BoardFactory.cpp
         src/SimpleBoard.cpp
+        src/hash_life/hash_life_board.cpp
+        src/hash_life/NextNodeGenerationTransformer.cpp
+        src/hash_life/Node.cpp
+        src/hash_life/NodeFactory.cpp
+        src/hash_life/NodeStorage.cpp
+        src/hash_life/NodePrinter.cpp
+        tests/RandomBoardCreator.cpp
 )
 target_link_libraries(
         life_test
@@ -41,6 +50,12 @@ add_executable(
         src/BoardFactory.cpp
         src/SimpleBoard.cpp
         tests/RandomBoardCreator.cpp
+        src/hash_life/hash_life_board.cpp
+        src/hash_life/NextNodeGenerationTransformer.cpp
+        src/hash_life/Node.cpp
+        src/hash_life/NodeFactory.cpp
+        src/hash_life/NodeStorage.cpp
+        src/hash_life/NodePrinter.cpp
 )
 
 target_link_libraries(

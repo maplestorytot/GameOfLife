@@ -4,6 +4,9 @@
 #include "../include/BoardFactory.h"
 #include "../include/simple_board/NestedVectorMatrix.h"
 #include "../include/simple_board/VectorMatrix.h"
+#include "../include/hash_life/hash_life_board.h"
+#include "../include/hash_life/NodeStorage.h"
+
 #include <gsl/gsl>
 #include <stdexcept>
 namespace GameOfLife {
@@ -17,6 +20,8 @@ namespace GameOfLife {
             return std::unique_ptr<IBoard>(new NestedVectorBoard(init_list, true));
         } else if (boardType == BoardType::MultiThreadedVector){
             return std::unique_ptr<IBoard>(new VectorBoard(init_list, true));
+        } else if (boardType == BoardType::HashLife){
+            return std::unique_ptr<IBoard>(new HashLifeBoard(init_list, std::make_shared<NodeStorage>()));
         }
 
         throw std::invalid_argument( "Invalid Board Type!" );

@@ -10,7 +10,7 @@
 #include "util.h"
 
 namespace GameOfLife {
-    enum CellState {DEAD, LIVE};
+    enum CellState {DEAD = 0, LIVE = 1};
     using Row = int;
     using Column = int;
     struct Coordinate {
@@ -25,7 +25,7 @@ namespace GameOfLife {
     DECLARE_CLASS_AS_INTERFACE(IBoard);
     public:
         virtual void doAdvance() = 0;
-        virtual CellState& operator[](const Coordinate& coordinate) = 0;
+        virtual CellState operator[](const Coordinate& coordinate) = 0;
         virtual void print() = 0;
     };
 

@@ -18,11 +18,11 @@ namespace GameOfLife {
             StartingBoardState input, bool multi_threaded) :
             board(input.size(), input), copy_board(board), multi_threaded(multi_threaded){}
 
-    CellState &NestedVectorBoard::operator[](const Coordinate &coordinate) {
+    CellState NestedVectorBoard::operator[](const Coordinate &coordinate) {
         return board[coordinate];
     }
 
-    CellState &VectorBoard::operator[](const Coordinate &coordinate) {
+    CellState VectorBoard::operator[](const Coordinate &coordinate) {
         return board[coordinate];
     }
 

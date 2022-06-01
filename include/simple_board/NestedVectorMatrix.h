@@ -22,7 +22,7 @@ namespace GameOfLife {
     public:
         NestedVectorBoard(StartingBoardState init_list,  bool multi_threaded);
         void doAdvance() override;
-        CellState& operator[](const Coordinate& coordinate) override;
+        CellState operator[](const Coordinate& coordinate) override;
         void print() override;
     private:
         NestedVectorRepresentationOfMatrix board;

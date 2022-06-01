@@ -7,8 +7,8 @@
 #include "./RandomBoardCreator.h"
 #include <ctime>
 namespace GameOfLife {
-    const int NUM_EPOCHS = 10;
-    const std::vector<long> BOARD_SIZES = {10, 100, 1000};
+    const int NUM_EPOCHS = 10000;
+    const std::vector<long> BOARD_SIZES = {/*8, 128, */512, /*4096, 8192*/};
     class LifePerformanceFixture : public benchmark::Fixture {
     public:
         void SetUp(const ::benchmark::State& state) {
@@ -39,8 +39,10 @@ namespace GameOfLife {
 
     // Register the function as a benchmark
     BENCHMARK_REGISTER_F(LifePerformanceFixture, BM_GameOfLifeSpeed)->ArgsProduct(
-            {{BoardType::NestedVector, BoardType::Vector, BoardType::MultiThreadedNestedVector,
-              BoardType::MultiThreadedVector}, BOARD_SIZES});
+            {{
+              BoardType::MultiThreadedVector }, BOARD_SIZES});
+           //*BoardType::NestedVector, BoardType::Vector, *//*BoardType::MultiThreadedNestedVector,///BoardType::HashLife,BoardType::Vector,
+
 
     // Run the benchmark
     BENCHMARK_MAIN();
